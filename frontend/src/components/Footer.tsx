@@ -2,9 +2,9 @@ import React from "react";
 
 const Footer: React.FC = () => {
   return (
-    <div>
-      <p>In footer components!</p>
-    </div>
+    <footer className="bg-gray-800 text-white">
+      <p>optimize customer handling through my app!</p>
+    </footer>
   );
 };
 
