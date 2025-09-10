@@ -17,13 +17,13 @@ const Header: React.FC = () => {
       {/* right (desktop) */}
       <div className="hidden md:flex items-center gap-10 text-[1.1rem] md:text-[1.3rem] font-medium">
         <Link
-          to="/login"
+          to="/auth/login"
           className="hover:text-purple-800 hover:underline hover:underline-offset-2 transition-colors duration-150"
         >
           Login
         </Link>
         <Link
-          to="/signup"
+          to="/auth/signup"
           className="bg-purple-600 px-6 py-2 text-white rounded-lg hover:bg-purple-800 transition-colors"
         >
           Signup
@@ -61,14 +61,14 @@ const Header: React.FC = () => {
             {/* nav section */}
             <nav className="flex flex-col gap-4 p-6 text-base font-medium text-gray-700">
               <Link
-                to="/login"
+                to="/auth/login"
                 onClick={() => setIsOpen(false)}
                 className="px-4 py-3 rounded-md hover:bg-purple-600 transition"
               >
                 Login
               </Link>
               <Link
-                to="/signup"
+                to="/auth/signup"
                 onClick={() => setIsOpen(false)}
                 className="px-4 py-3 bg-purple-600 text-white rounded-md text-center hover:bg-purple-700 transition"
               >
