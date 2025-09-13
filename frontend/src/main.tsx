@@ -3,9 +3,11 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import { RouterProvider } from "react-router-dom";
 import appRouter from "./Routes";
+import { Toaster } from "react-hot-toast";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <RouterProvider router={appRouter} />
+    <Toaster position="top-center" reverseOrder={false} />
   </StrictMode>
 );
