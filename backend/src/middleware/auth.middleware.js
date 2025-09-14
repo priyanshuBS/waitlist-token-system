@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { ApiError } from "../utils/ApiError.js";
-import { asyncHandler } from "../utils/asyncHandler";
+import { asyncHandler } from "../utils/asyncHandler.js";
 import { User } from "../models/user.model.js";
 
 export const protect = asyncHandler(async (req, _, next) => {
@@ -24,12 +24,12 @@ export const protect = asyncHandler(async (req, _, next) => {
 export const restrictTo = (...roles) => {
   return (req, _, next) => {
     if (!req.user) {
-      return next(new Error(401, "Not authenticated"));
+      return next(new ApiError(401, "Not authenticated"));
     }
 
     if (!roles.includes(req.user.role)) {
       return next(
-        new ApiError(403, "You do not have permission to perform this action")
+        new ApiError(403, `Access denied. Allowed roles: ${roles.join(", ")}`)
       );
     }
     next();
