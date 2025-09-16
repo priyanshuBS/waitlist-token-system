@@ -55,7 +55,6 @@ export const Signup = asyncHandler(async (req, res) => {
 
 export const Login = asyncHandler(async (req, res) => {
   const parsed = loginSchema.safeParse(req.body);
-
   if (!parsed.success) {
     const errors = parsed.error.issues.map((issue) => ({
       field: issue.path.join("."),
@@ -63,13 +62,11 @@ export const Login = asyncHandler(async (req, res) => {
     }));
     throw new ApiError(400, "Validation error", errors);
   }
-
   const { email, phoneNumber, password } = parsed.data;
 
   const userExist = await User.findOne({
     $or: [{ email }, { phoneNumber }],
   }).select("+password");
-
   if (!userExist) {
     throw new ApiError(404, "User not found");
   }
