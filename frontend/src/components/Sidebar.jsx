@@ -1,7 +1,17 @@
 import { Link } from "react-router-dom";
 import { X } from "lucide-react";
+import { logoutApi } from "../api/auth";
+import toast from "react-hot-toast";
 
 const Sidebar = ({ setSidebarOpen }) => {
+  const handleLogout = async () => {
+    try {
+      await logoutApi();
+      toast.success("Logout successfully!");
+    } catch (error) {
+      toast.error("Logout failed");
+    }
+  };
   return (
     // cover whole screen
     <div className="inset-0 fixed z-50 flex">
@@ -31,6 +41,12 @@ const Sidebar = ({ setSidebarOpen }) => {
           >
             Signup
           </Link>
+          <button
+            className="bg-gray-600 py-2 rounded-xl text-white"
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
         </div>
       </div>
     </div>
