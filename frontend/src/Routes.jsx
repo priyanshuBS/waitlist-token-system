@@ -4,8 +4,8 @@ import LandingPage from "./pages/LandingPage";
 import Home from "./pages/Home";
 import ErrorPage from "./pages/ErrorPage";
 import AuthLayout from "./layouts/AuthLayout";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
+import Login from "./pages/auth/Login";
+import Signup from "./pages/auth/Signup";
 
 const appRouter = createBrowserRouter([
   {

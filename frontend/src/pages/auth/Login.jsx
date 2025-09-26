@@ -1,13 +1,12 @@
 import { useState } from "react";
-import Input from "../components/UI/Input";
-import toast from "react-hot-toast";
-import { signupApi } from "../api/auth";
+import Input from "../../components/UI/Input";
 import { Link } from "react-router-dom";
+import { loginApi } from "../../api/auth";
+import toast from "react-hot-toast";
 
-const Signup = () => {
+const Login = () => {
   const [mode, setMode] = useState("email");
   const [formData, setFormData] = useState({
-    fullName: "",
     email: "",
     phoneNumber: "",
     password: "",
@@ -20,38 +19,31 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const payload =
       mode === "email"
-        ? {
-            fullName: formData.fullName,
-            email: formData.email,
-            password: formData.password,
-          }
-        : {
-            fullName: formData.fullName,
-            phoneNumber: formData.phoneNumber,
-            password: formData.password,
-          };
+        ? { email: formData.email, password: formData.password }
+        : { phoneNumber: formData.phoneNumber, password: formData.password };
+
     try {
-      const { data } = await signupApi(payload);
+      const { data } = await loginApi(payload);
       console.log(data.data.user);
-      toast.success("Signup successfull!");
+      toast.success("Login successful!");
       setFormData({
-        fullName: "",
         email: "",
         phoneNumber: "",
         password: "",
       });
     } catch (error) {
-      console.log("Signup failed");
+      toast.error(error.response?.data?.message || "Login failed");
     }
   };
+
   return (
     <div className="p-6 shadow-2xl bg-white text-center rounded-2xl">
-      <h3 className="text-4xl font-bold text-red-400 py-6">
-        Create your account!
-      </h3>
-      {/* option */}
+      <h3 className="text-4xl font-bold text-red-400 py-6">Welcome Back!</h3>
+
+      {/* select mode */}
       <div className="flex items-center gap-4 mb-6 mt-4 w-full text-[1.1rem]">
         <button
           className={`w-full py-2.5 rounded-md ${
@@ -74,14 +66,8 @@ const Signup = () => {
           Use Phone
         </button>
       </div>
+
       <form onSubmit={handleSubmit} className="space-y-8 py-4">
-        <Input
-          type="text"
-          name="fullName"
-          placeholder="Jhon Doe"
-          value={formData.fullName}
-          onChange={handleChange}
-        />
         {mode === "email" ? (
           <Input
             type="text"
@@ -99,6 +85,7 @@ const Signup = () => {
             onChange={handleChange}
           />
         )}
+
         <Input
           type="password"
           name="password"
@@ -109,10 +96,11 @@ const Signup = () => {
 
         <button
           type="submit"
-          className="w-full bg-blue-600 py-2.5 text-white rounded-md cursor-pointer text-[1.1rem] font-medium"
+          className="w-full bg-blue-600 py-2.5 text-white rounded-md font-medium cursor-pointer text-[1.2rem]"
         >
-          Signup
+          Login
         </button>
+
         <button
           type="button"
           onClick={() =>
@@ -123,17 +111,18 @@ const Signup = () => {
           Login with Google
         </button>
       </form>
+
       <p className="text-[0.98rem] text-gray-600 pt-2">
-        Account already exist{" "}
+        Account doesn't exist{" "}
         <Link
-          to="/auth/login"
+          to="/auth/signup"
           className="text-blue-600 hover:text-blue-800 text-md font-medium"
         >
-          Login
+          Signup
         </Link>
       </p>
     </div>
   );
 };
 
-export default Signup;
+export default Login;
