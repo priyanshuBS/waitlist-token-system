@@ -4,10 +4,13 @@ import "./index.css";
 import { RouterProvider } from "react-router-dom";
 import appRouter from "./Routes";
 import { Toaster } from "react-hot-toast";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={appRouter} />
-    <Toaster position="top-center" reverseOrder={false} />
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_client_id}>
+      <RouterProvider router={appRouter} />
+      <Toaster position="top-center" reverseOrder={false} />
+    </GoogleOAuthProvider>
   </StrictMode>
 );

@@ -1,8 +1,9 @@
 import { useState } from "react";
 import Input from "../components/UI/Input";
 import { Link } from "react-router-dom";
-import { loginApi } from "../api/auth";
+import { loginApi, googleApi } from "../api/auth";
 import toast from "react-hot-toast";
+import { GoogleLogin } from "@react-oauth/google";
 
 const Login = () => {
   const [mode, setMode] = useState("email");
@@ -38,6 +39,20 @@ const Login = () => {
     } catch (error) {
       toast.error("Login failed");
     }
+  };
+
+  const handleSuccess = async (credentialResponse) => {
+    try {
+      const res = await googleApi(credentialResponse.credential);
+      console.log(res);
+      toast.success("Login successfull");
+    } catch (error) {
+      toast.error("Login failed.");
+    }
+  };
+
+  const handleError = () => {
+    toast.error("Google login failed.");
   };
   return (
     <div className="p-6 shadow-2xl bg-white text-center rounded-2xl">
@@ -99,6 +114,9 @@ const Login = () => {
         >
           Login
         </button>
+        <div>
+          <GoogleLogin onSuccess={handleSuccess} onError={handleError} />
+        </div>
       </form>
       <p className="text-[0.98rem] text-gray-600 pt-2">
         Account doesn't exist{" "}
