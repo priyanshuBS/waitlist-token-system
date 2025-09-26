@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { Menu, X } from "lucide-react";
 import { useState } from "react";
+import { FiMenu, FiX } from "react-icons/fi";
 import Sidebar from "./Sidebar";
 
 const Header = () => {
@@ -19,13 +19,13 @@ const Header = () => {
         {/* Desktop Menu */}
         <nav className="hidden md:flex items-center gap-8 font-medium text-[1.3rem]">
           <Link
-            to="/auth/login"
+            to="/login"
             className="relative text-gray-700 hover:text-black transition-colors after:content-[''] after:block after:w-0 after:h-[2px] after:bg-blue-600 after:transition-all hover:after:w-full"
           >
             Login
           </Link>
           <Link
-            to="/auth/signup"
+            to="/signup"
             className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow-md transition-all"
           >
             Signup
@@ -38,7 +38,7 @@ const Header = () => {
             onClick={() => setSidebarOpen(true)}
             className="p-2 rounded-md hover:bg-gray-100 transition-colors"
           >
-            <Menu className="w-7 h-7 text-gray-700" />
+            <FiMenu className="w-7 h-7 text-gray-700" />
           </button>
         </div>
       </div>
@@ -53,7 +53,7 @@ const Header = () => {
           <div className="absolute top-0 right-0 w-64 h-full bg-white shadow-lg transform transition-transform duration-300">
             <div className="flex justify-end p-4">
               <button onClick={() => setSidebarOpen(false)}>
-                <X className="w-6 h-6 text-gray-700" />
+                <FiX className="w-6 h-6 text-gray-700" />
               </button>
             </div>
             <Sidebar setSidebarOpen={setSidebarOpen} />
