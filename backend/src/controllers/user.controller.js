@@ -24,11 +24,7 @@ export const GoogleCallback = asyncHandler(async (req, res) => {
 
   res.cookie("token", token, options);
 
-  return res
-    .status(200)
-    .json(
-      new ApiResponse(200, { token, user }, "Login with google successfully!")
-    );
+  return res.redirect("http://localhost:5173/home");
 });
 
 export const Signup = asyncHandler(async (req, res) => {

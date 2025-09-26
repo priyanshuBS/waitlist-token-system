@@ -7,12 +7,11 @@ passport.use(
     {
       clientID: process.env.client_id,
       clientSecret: process.env.client_secret,
-      callbackURL: "/api/users/google/callback",
+      callbackURL: "http://localhost:8000/api/user/google/callback",
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
         let user = await User.findOne({ googleId: profile.id });
-
         if (!user) {
           user = await User.create({
             fullName: profile.displayName,
