@@ -11,6 +11,26 @@ const options = {
   maxAge: 2 * 24 * 60 * 60 * 1000,
 };
 
+// Google Callback
+
+export const GoogleCallback = asyncHandler(async (req, res) => {
+  if (!req.user) {
+    throw new ApiError(401, "Google Authentication failed");
+  }
+
+  const token = req.user.generateToken();
+
+  const user = req.user.toObject ? req.user.toObject() : { ...req.user };
+
+  res.cookie("token", token, options);
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(200, { token, user }, "Login with google successfully!")
+    );
+});
+
 export const Signup = asyncHandler(async (req, res) => {
   const parsed = signupSchema.safeParse(req.body);
 

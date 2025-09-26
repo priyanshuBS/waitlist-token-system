@@ -30,7 +30,19 @@ const userSchema = new Schema(
     password: {
       type: String,
       select: false,
-      required: true,
+      required: function () {
+        return this.provider === "local";
+      },
+    },
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
+    provider: {
+      type: String,
+      enum: ["local", "google"],
+      default: "local",
     },
     location: {
       type: {
@@ -62,19 +74,13 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
-userSchema.pre("validate", function (next) {
-  if (!this.email && !this.phoneNumber) {
-    return next(new Error("Atleast email or phone number is required"));
-  }
-  next();
-});
-
 userSchema.pre("save", async function (next) {
   try {
+    if (this.provider !== "local") return next();
     if (!this.isModified("password")) return next();
 
     const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
+    this.password = bcrypt.hash(this.password, salt);
     next();
   } catch (error) {
     next(error);
@@ -92,7 +98,7 @@ userSchema.methods.generateToken = function () {
   return jwt.sign(
     {
       id: this._id,
-      role: this.role,
+      email: this.email,
     },
     process.env.JWT_SECRET,
     { expiresIn: "2d" }
