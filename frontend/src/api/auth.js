@@ -11,7 +11,3 @@ export const loginApi = (data) => {
 export const logoutApi = () => {
   return api.post("/user/logout");
 };
-
-export const googleApi = (token) => {
-  return api.get("/user/google/callback", { token });
-};

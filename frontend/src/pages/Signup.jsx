@@ -113,6 +113,15 @@ const Signup = () => {
         >
           Signup
         </button>
+        <button
+          type="button"
+          onClick={() =>
+            (window.location.href = "http://localhost:8000/api/user/google")
+          }
+          className="w-full bg-red-500 py-2.5 text-white rounded-md font-medium cursor-pointer text-[1.2rem]"
+        >
+          Login with Google
+        </button>
       </form>
       <p className="text-[0.98rem] text-gray-600 pt-2">
         Account already exist{" "}
