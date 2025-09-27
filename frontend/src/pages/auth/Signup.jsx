@@ -28,7 +28,10 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div
+      className="flex items-center justify-center bg-gray-50 px-4"
+      style={{ minHeight: "calc(100vh - 4.8rem)" }}
+    >
       <div className="w-full max-w-md p-8 bg-white rounded-3xl shadow-xl">
         <h2 className="text-3xl font-extrabold mb-8 text-center text-gray-800">
           Create Your Account
