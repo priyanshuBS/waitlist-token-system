@@ -93,13 +93,11 @@ export const googleAuthCallback = asyncHandler(async (req, res) => {
 
   if (!user) {
     throw new ApiError(401, "Authentication Failed");
-
-    const token = user.generateToken();
-
-    res.cookie("token", token, options);
-
-    return res
-      .status(200)
-      .json(new ApiResponse(200, { user, token }, "Google login successful"));
   }
+
+  const token = user.generateToken();
+
+  res.cookie("token", token, options);
+
+  return res.redirect(`${process.env.CLIENT_URL}/home`);
 });
