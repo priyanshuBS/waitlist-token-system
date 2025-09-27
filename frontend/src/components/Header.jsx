@@ -7,8 +7,8 @@ const Header = () => {
         <div className="flex justify-between items-center h-[4.8rem]">
           {/* Logo / Brand */}
           <div className="flex-shrink-0">
-            <Link to="/" className="text-2xl font-bold text-indigo-600">
-              Waitlist App
+            <Link to="/" className="text-3xl font-bold text-indigo-600">
+              LineUp
             </Link>
           </div>
 
