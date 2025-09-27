@@ -23,7 +23,7 @@ const Login = () => {
   };
 
   const handleGoogleLogin = () => {
-    console.log("Login with Google");
+    window.location.href = `${import.meta.env.VITE_SERVER_URL}/api/auth/google`;
   };
 
   return (

@@ -24,7 +24,7 @@ const Signup = () => {
   };
 
   const handleGoogleSignup = () => {
-    console.log("Signup with Google");
+    window.location.href = `${import.meta.env.VITE_SERVER_URL}/api/auth/google`;
   };
 
   return (
