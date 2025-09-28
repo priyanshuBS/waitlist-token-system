@@ -1,9 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Input from "../../components/UI/Input";
+import toast from "react-hot-toast";
+import { loginSchema } from "../../validations/auth.validation";
+import { useMutation } from "@tanstack/react-query";
+import { loginApi } from "../../api/auth";
 
 const Login = () => {
-  const [method, setMethod] = useState("email"); // email or phone
+  const [method, setMethod] = useState("email");
   const [form, setForm] = useState({
     email: "",
     phoneNumber: "",
@@ -12,14 +16,43 @@ const Login = () => {
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
 
+  const validateField = (name, value) => {
+    const singleSchema = loginSchema.shape[name];
+    if (!value) return "";
+    if (!singleSchema) return "";
+
+    const result = loginSchema.safeParse(value);
+    if (!result.success) {
+      return result.error.issues[0].message;
+    }
+    return "";
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+
+    const errorMsg = validateField(name, value);
+    setErrors((prev) => ({ ...prev, [name]: errorMsg }));
   };
+
+  const { mutate, isLoading } = useMutation({
+    mutationFn: loginApi,
+    onSuccess: (data) => {
+      console.log("Login data: ", data);
+      toast.success("Login successfull");
+    },
+    onError: () => {
+      toast.error("Login failed. Try again");
+    },
+  });
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // Handle login logic here
+    loginSchema.safeParse();
+    setErrors({});
+    mutate(form);
+    setForm({ email: "", phoneNumber: "", password: "" });
   };
 
   const handleGoogleLogin = () => {

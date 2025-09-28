@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Input from "../../components/UI/Input";
+import { useMutation } from "@tanstack/react-query";
+import { signupApi } from "../../api/auth";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { signupSchema } from "../../validations/auth.validation";
 
 const Signup = () => {
   const [method, setMethod] = useState("email");
@@ -12,15 +17,51 @@ const Signup = () => {
   });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+
+  const { mutate, isLoading } = useMutation({
+    mutationFn: signupApi,
+    onSuccess: (data) => {
+      toast.success("Signup successfull");
+      console.log("Signup data: ", data);
+      navigate("/home");
+    },
+    onError: () => {
+      toast.error("Signup failed. Try agian");
+    },
+  });
+
+  const validateField = (name, value) => {
+    const singleSchema = signupSchema.shape[name];
+    if (!value) return "";
+    if (!singleSchema) return "";
+
+    const result = singleSchema.safeParse(value);
+    if (!result.success) {
+      return result.error.issues[0].message;
+    }
+    return "";
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+
+    const errorMsg = validateField(name, value);
+    setErrors((prev) => ({ ...prev, [name]: errorMsg }));
   };
 
   const handleSignup = (e) => {
     e.preventDefault();
-    //
+    signupSchema.safeParse();
+    setErrors({});
+    mutate(form);
+    setForm({
+      fullName: "",
+      email: "",
+      phoneNumber: "",
+      password: "",
+    });
   };
 
   const handleGoogleSignup = () => {
@@ -115,7 +156,7 @@ const Signup = () => {
             type="submit"
             className="w-full bg-blue-500 text-white py-3 rounded-xl font-semibold hover:bg-blue-600 shadow-md transition mt-2 cursor-pointer"
           >
-            Sign Up
+            {isLoading ? "Signing up..." : "Sign up"}
           </button>
         </form>
         {/* Already have account */}
