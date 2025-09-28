@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/UI/Input";
-import toast from "react-hot-toast";
 import { loginSchema } from "../../validations/auth.validation";
-import { useMutation } from "@tanstack/react-query";
-import { loginApi } from "../../api/auth";
+import useAuth from "../../hooks/useAuth";
 
 const Login = () => {
+  const { login, loginStatus } = useAuth();
   const [method, setMethod] = useState("email");
   const [form, setForm] = useState({
     email: "",
@@ -15,6 +14,7 @@ const Login = () => {
   });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const validateField = (name, value) => {
     const singleSchema = loginSchema.shape[name];
@@ -36,21 +36,15 @@ const Login = () => {
     setErrors((prev) => ({ ...prev, [name]: errorMsg }));
   };
 
-  const { mutate, isLoading } = useMutation({
-    mutationFn: loginApi,
-    onSuccess: () => {
-      toast.success("Login successfull");
-    },
-    onError: () => {
-      toast.error("Login failed. Try again");
-    },
-  });
-
   const handleLogin = (e) => {
     e.preventDefault();
     loginSchema.safeParse();
     setErrors({});
-    mutate(form);
+    login(form, {
+      onSuccess: () => {
+        navigate("/home");
+      },
+    });
     setForm({ email: "", phoneNumber: "", password: "" });
   };
 
@@ -137,7 +131,7 @@ const Login = () => {
             type="submit"
             className="w-full bg-blue-500 text-white py-3 rounded-xl font-semibold hover:bg-blue-600 shadow-md transition mt-2 cursor-pointer"
           >
-            Login
+            {loginStatus.isLoading ? "Login..." : "Login"}
           </button>
         </form>
 
