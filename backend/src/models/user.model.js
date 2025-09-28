@@ -19,6 +19,7 @@ const userSchema = new mongoose.Schema(
       match: [/^\S+@\S+\.\S+$/, "Invalid email format"],
       minLength: 3,
       maxLength: 50,
+      sparse: true,
     },
     phoneNumber: {
       type: String,
@@ -26,6 +27,7 @@ const userSchema = new mongoose.Schema(
       unique: true,
       minLength: 10,
       match: [/^\d{10,15}$/, "Phone number must be digits only"],
+      sparse: true,
     },
     password: {
       type: String,
@@ -68,7 +70,7 @@ userSchema.pre("save", async function (next) {
   try {
     if (!this.isModified("password") || !this.password) next();
     const salt = await bcrypt.genSalt(10);
-    this.password = bcrypt.hash(this.password, salt);
+    this.password = await bcrypt.hash(this.password, salt);
     next();
   } catch (error) {
     next(error);

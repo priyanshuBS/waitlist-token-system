@@ -19,8 +19,15 @@ export const Signup = asyncHandler(async (req, res) => {
 
   const { fullName, email, phoneNumber, password } = parsed.data;
 
-  const userExist = await User.findOne({ $or: [{ email }, { phoneNumber }] });
+  const query = [];
+  if (email) query.push({ email });
+  if (phoneNumber) query.push({ phoneNumber });
 
+  if (query.length === 0) {
+    throw new ApiError(400, "Email or phoneNumber is required");
+  }
+
+  const userExist = await User.findOne({ $or: query });
   if (userExist) {
     throw new ApiError(409, "User already registered");
   }
@@ -51,20 +58,22 @@ export const Login = asyncHandler(async (req, res) => {
 
   const { email, phoneNumber, password } = parsed.data;
 
-  const user = await User.findOne({ $or: [{ email }, { phoneNumber }] }).select(
-    "+password"
-  );
+  const query = [];
+  if (email) query.push({ email });
+  if (phoneNumber) query.push({ phoneNumber });
 
+  if (query.length === 0) {
+    throw new ApiError(400, "Email or phoneNumber is required");
+  }
+
+  const user = await User.findOne({ $or: query }).select("+password");
   if (!user) {
     throw new ApiError(404, "User not exist");
   }
-
   const isPasswordCorrect = await user.comparePassword(password);
-
   if (!isPasswordCorrect) {
     throw new ApiError(401, "Invalid password");
   }
-
   const token = user.generateToken();
 
   res.cookie("token", token, options);
