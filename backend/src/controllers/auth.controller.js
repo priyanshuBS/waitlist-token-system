@@ -13,7 +13,6 @@ const options = {
 
 export const Signup = asyncHandler(async (req, res) => {
   const parsed = signupSchema.safeParse(req.body);
-
   if (!parsed.success) {
     throw new ApiError(400, "Validation error", parsed.error.format());
   }
