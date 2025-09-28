@@ -37,7 +37,7 @@ export const Signup = asyncHandler(async (req, res) => {
     email,
     phoneNumber,
     password,
-    role: "customer",
+    role: "user",
   });
 
   const token = newUser.generateToken();
