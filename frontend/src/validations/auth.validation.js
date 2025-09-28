@@ -9,7 +9,6 @@ export const signupSchema = z
       .nonempty("Full Name is required"),
 
     email: z
-      .string()
       .email("Please enter a valid email address")
       .trim()
       .toLowerCase()
@@ -44,7 +43,6 @@ export const signupSchema = z
 export const loginSchema = z
   .object({
     email: z
-      .string()
       .email("Please enter a valid email address")
       .trim()
       .toLowerCase()

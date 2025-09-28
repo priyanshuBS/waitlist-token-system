@@ -21,7 +21,7 @@ const Login = () => {
     if (!value) return "";
     if (!singleSchema) return "";
 
-    const result = loginSchema.safeParse(value);
+    const result = singleSchema.safeParse(value);
     if (!result.success) {
       return result.error.issues[0].message;
     }
@@ -38,8 +38,7 @@ const Login = () => {
 
   const { mutate, isLoading } = useMutation({
     mutationFn: loginApi,
-    onSuccess: (data) => {
-      console.log("Login data: ", data);
+    onSuccess: () => {
       toast.success("Login successfull");
     },
     onError: () => {
