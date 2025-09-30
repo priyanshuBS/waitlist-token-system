@@ -4,6 +4,8 @@ import RootLayout from "./RootLayout";
 import Home from "./pages/Home";
 import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/Signup";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { fetchUserBusiness } from "./api/business";
 
 const appRouter = createBrowserRouter([
   {
@@ -15,8 +17,14 @@ const appRouter = createBrowserRouter([
         element: <LandingPage />,
       },
       {
-        path: "home",
-        element: <Home />,
+        element: <ProtectedRoute />,
+        children: [
+          {
+            path: "home",
+            element: <Home />,
+            loader: fetchUserBusiness,
+          },
+        ],
       },
       {
         path: "login",
