@@ -34,7 +34,7 @@ const CreateBusiness = () => {
   };
 
   return (
-    <div className="bg-gradient-to-r from-indigo-50 via-white to-pink-50 min-h-screen flex items-center justify-center py-12 px-4">
+    <div className="bg-gradient-to-br from-indigo-50 via-white to-purple-50 min-h-screen flex items-center justify-center py-12 px-4">
       <div className="w-full max-w-4xl bg-white rounded-3xl shadow-2xl p-6 sm:p-8 md:p-10">
         <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 text-center mb-8 tracking-tight">
           Register Your Business
@@ -123,9 +123,9 @@ const CreateBusiness = () => {
           <Input
             type="text"
             placeholder="Tags (comma separated)"
-            value={formData.tags.join(" ")}
+            value={formData.tags.join(",")}
             onChange={(e) =>
-              setFormData({ ...formData, tags: e.target.value.split(" ") })
+              setFormData({ ...formData, tags: e.target.value.split(",") })
             }
             className="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 rounded-xl"
           />
