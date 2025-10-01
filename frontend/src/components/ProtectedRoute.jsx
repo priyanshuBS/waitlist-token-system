@@ -3,7 +3,7 @@ import { Navigate, Outlet } from "react-router-dom";
 
 const ProtectedRoute = () => {
   const user = localStorage.getItem("user");
-  console.log(user);
+  // console.log(user);
 
   if (!user) {
     return <Navigate to="/login"></Navigate>;

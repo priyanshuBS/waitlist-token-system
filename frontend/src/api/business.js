@@ -1,11 +1,15 @@
 import api from "./api";
+import toast from "react-hot-toast";
 
 export const fetchUserBusiness = async () => {
   try {
-    const res = await api.get("/business/info");
-    return res?.data;
+    const { data } = await api.get("/business/");
+    // console.log(data);
+    return data;
   } catch (error) {
-    console.log("Error fetching data!");
-    return [];
+    toast.error("Failed to fetch business details of current user!");
+    return {
+      data: [],
+    };
   }
 };
