@@ -7,6 +7,7 @@ import Signup from "./pages/auth/Signup";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { fetchUserBusiness } from "./api/business";
 import BusinessDash from "./pages/dashboard/BusinessDash";
+import CreateBusiness from "./pages/CreateBusiness";
 
 const appRouter = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ const appRouter = createBrowserRouter([
           {
             path: "business/dashboard",
             element: <BusinessDash />,
+          },
+          {
+            path: "business/create",
+            element: <CreateBusiness />,
           },
         ],
       },
