@@ -101,3 +101,34 @@ export const deleteBusiness = asyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, business, "Business deleted successfully"));
 });
+
+export const getNearbyBusinesses = asyncHandler(async (req, res) => {
+  const { lng, lat, distance = 5000 } = req.query;
+
+  let businesses = [];
+
+  if (lng && lat) {
+    businesses = await Business.find({
+      "location.coordinates": {
+        $near: {
+          $geometry: {
+            type: "Point",
+            coordinates: [parseFloat(lng), parseFloat(lat)],
+          },
+          $maxDistance: parseInt(distance),
+        },
+      },
+      isActive: true,
+    });
+  }
+
+  if (!businesses.length) {
+    businesses = await Business.find({ isActive: true })
+      .sort({ rating: -1 })
+      .limit(10);
+  }
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, businesses, "Businesses fetched successfully"));
+});
