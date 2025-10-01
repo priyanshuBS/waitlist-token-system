@@ -7,7 +7,7 @@ import Signup from "./pages/auth/Signup";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { fetchUserBusiness } from "./api/business";
 import BusinessDash from "./pages/dashboard/BusinessDash";
-import CreateBusiness from "./pages/CreateBusiness";
+import CreateBusiness from "./pages/business/CreateBusiness";
 
 const appRouter = createBrowserRouter([
   {
