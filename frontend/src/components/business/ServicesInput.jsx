@@ -35,12 +35,14 @@ const ServiceInput = ({ formData, setFormData }) => {
             placeholder="Service Name"
             onChange={(e) => handleChange(idx, "name", e.target.value)}
             value={service.name}
+            className="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 rounded-xl"
           />
           <Input
             type="number"
             placeholder="Price"
             onChange={(e) => handleChange(idx, "price", e.target.value)}
             value={service.price}
+            className="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 rounded-xl"
           />
           <Input
             type="number"
@@ -49,6 +51,7 @@ const ServiceInput = ({ formData, setFormData }) => {
               handleChange(idx, "durationMinutes", e.target.value)
             }
             value={service.durationMinutes}
+            className="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 rounded-xl"
           />
           {formData.services.length > 1 && (
             <button
@@ -64,7 +67,7 @@ const ServiceInput = ({ formData, setFormData }) => {
       <button
         type="button"
         onClick={addService}
-        className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition"
+        className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition cursor-pointer"
       >
         <FaPlus /> Add Service
       </button>

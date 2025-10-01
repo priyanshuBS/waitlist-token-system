@@ -29,8 +29,10 @@ const Input = ({
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className={`w-full border ${className} rounded-lg px-4 py-3 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-0 transition
-          ${error ? "border-red-400 focus:ring-red-400" : "border-gray-300"}`}
+        className={`w-full border rounded-lg px-4 py-3 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-0 transition
+          ${
+            error ? "border-red-400 focus:ring-red-400" : "border-gray-300"
+          } ${className}`}
       />
 
       {/* Extra element */}

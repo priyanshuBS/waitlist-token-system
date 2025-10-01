@@ -81,39 +81,58 @@ const LocationPicker = ({ formData, setFormData }) => {
   };
 
   return (
-    <div className="space-y-2">
-      <h4 className="font-semibold text-gray-700 flex items-center gap-2">
-        <FaMapMarkerAlt /> Location
+    <div className="space-y-3">
+      <h4 className="font-semibold text-gray-700 flex items-center gap-2 text-lg">
+        <FaMapMarkerAlt className="text-indigo-500" /> Location
       </h4>
-      <Input
-        type="text"
-        placeholder="Enter Address"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-      />
-      <div className="border rounded-xl max-h-40 overflow-y-auto mt-1">
-        {suggestions.map((s, i) => (
-          <div
-            key={i}
-            className="p-2 cursor-pointer hover:bg-indigo-100"
-            onClick={() => handleSelect(s)}
-          >
-            {s.properties.name}, {s.properties.city || s.properties.state}
-          </div>
-        ))}
-      </div>
-      <MapContainer
-        center={marker || defaultCenter}
-        zoom={5}
-        style={{ height: "350px", borderRadius: "1rem", marginTop: "10px" }}
-      >
-        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-        <DraggableMarker
-          marker={marker}
-          setMarker={setMarker}
-          setFormData={setFormData}
+
+      {/* Search Input */}
+      <div className="relative">
+        <Input
+          type="text"
+          placeholder="Enter Address"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          className="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 rounded-xl"
         />
-      </MapContainer>
+
+        {/* Suggestions Box */}
+        {suggestions.length > 0 && (
+          <div className="absolute z-50 top-full left-0 w-full bg-white border border-gray-200 rounded-xl mt-1 shadow-lg max-h-48 overflow-y-auto">
+            {suggestions.map((s, i) => (
+              <div
+                key={i}
+                className="p-3 cursor-pointer hover:bg-indigo-50 transition flex flex-col"
+                onClick={() => handleSelect(s)}
+              >
+                <span className="font-medium text-gray-800">
+                  {s.properties.name}
+                </span>
+                <span className="text-sm text-gray-500">
+                  {s.properties.city || s.properties.state},{" "}
+                  {s.properties.country || "India"}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Map */}
+      <div className="rounded-xl overflow-hidden shadow-lg border border-gray-200">
+        <MapContainer
+          center={marker || defaultCenter}
+          zoom={5}
+          style={{ height: "350px", width: "100%" }}
+        >
+          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+          <DraggableMarker
+            marker={marker}
+            setMarker={setMarker}
+            setFormData={setFormData}
+          />
+        </MapContainer>
+      </div>
     </div>
   );
 };
