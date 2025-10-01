@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/UI/Input";
 import { signupSchema } from "../../validations/auth.validation";
 import useAuth from "../../hooks/useAuth";
+import { FcGoogle } from "react-icons/fc";
 
 const Signup = () => {
   const { signup, signupStatus } = useAuth();
@@ -60,23 +61,24 @@ const Signup = () => {
 
   return (
     <div
-      className="flex items-center justify-center bg-gray-50 px-4"
+      className="flex items-center justify-center px-4 bg-gradient-to-br from-indigo-50 via-white to-purple-50"
       style={{ minHeight: "calc(100vh - 4.8rem)" }}
     >
-      <div className="w-full max-w-md p-8 bg-white rounded-3xl shadow-xl">
-        <h2 className="text-3xl font-extrabold mb-8 text-center text-gray-800">
+      <div className="w-full max-w-md p-10 bg-white rounded-3xl shadow-2xl">
+        {/* Title */}
+        <h2 className="text-4xl font-extrabold mb-8 text-center bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
           Create Your Account
         </h2>
 
         {/* Email / Phone Toggle */}
-        <div className="flex justify-center mb-7 bg-gray-100 rounded-full">
+        <div className="flex justify-center mb-7 bg-gray-100 rounded-full overflow-hidden">
           <button
             type="button"
             onClick={() => setMethod("email")}
-            className={`flex-1 py-2.5 rounded-full font-medium transition cursor-pointer ${
+            className={`flex-1 py-2.5 font-medium transition cursor-pointer ${
               method === "email"
-                ? "bg-blue-500 text-white shadow"
-                : "text-gray-600"
+                ? "bg-indigo-600 text-white shadow"
+                : "text-gray-600 hover:bg-gray-200"
             }`}
           >
             Email
@@ -84,23 +86,24 @@ const Signup = () => {
           <button
             type="button"
             onClick={() => setMethod("phone")}
-            className={`flex-1 py-2.5 rounded-full font-medium transition cursor-pointer ${
+            className={`flex-1 py-2.5 font-medium transition cursor-pointer ${
               method === "phone"
-                ? "bg-blue-500 text-white shadow"
-                : "text-gray-600"
+                ? "bg-indigo-600 text-white shadow"
+                : "text-gray-600 hover:bg-gray-200"
             }`}
           >
             Phone
           </button>
         </div>
 
-        <form onSubmit={handleSignup}>
+        {/* Form */}
+        <form onSubmit={handleSignup} className="space-y-5">
           <Input
             name="fullName"
             type="text"
             value={form.fullName}
             onChange={handleChange}
-            placeholder="Jhon Doe"
+            placeholder="John Doe"
             error={errors.fullName}
           />
 
@@ -135,36 +138,46 @@ const Signup = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="text-gray-500 font-medium cursor-pointer"
+                className="text-sm text-indigo-600 hover:underline"
               >
                 {showPassword ? "Hide" : "Show"}
               </button>
             }
           />
 
+          {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-3 rounded-xl font-semibold hover:bg-blue-600 shadow-md transition mt-2 cursor-pointer"
+            className="w-full bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 hover:scale-[1.02] transition-all shadow-md cursor-pointer"
           >
-            {signupStatus.isLoading ? "Signing up..." : "Sign up"}
+            {signupStatus.isLoading ? "Signing up..." : "Sign Up"}
           </button>
         </form>
+
         {/* Already have account */}
-        <p className="text-center text-gray-500 mt-4">
+        <p className="text-center text-gray-600 mt-5">
           Already have an account?{" "}
           <Link
             to="/login"
-            className="text-blue-500 font-medium hover:underline"
+            className="text-indigo-600 font-semibold hover:underline"
           >
             Login
           </Link>
         </p>
-        <div className="my-4 text-center text-gray-400 font-medium">or</div>
+
+        {/* Divider */}
+        <div className="my-6 flex items-center gap-4">
+          <hr className="flex-1 border-gray-300" />
+          <span className="text-gray-400 font-medium text-sm">OR</span>
+          <hr className="flex-1 border-gray-300" />
+        </div>
+
+        {/* Google Signup */}
         <button
           onClick={handleGoogleSignup}
-          className="w-full border border-gray-300 py-3 rounded-xl flex items-center justify-center font-medium hover:bg-gray-100 transition shadow-sm cursor-pointer"
+          className="w-full border border-gray-300 py-3 rounded-xl flex items-center justify-center gap-3 font-medium hover:bg-gray-50 transition shadow-sm cursor-pointer"
         >
-          Sign up with Google
+          <FcGoogle className="text-2xl" /> Continue with Google
         </button>
       </div>
     </div>
