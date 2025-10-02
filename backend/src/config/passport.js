@@ -17,7 +17,7 @@ passport.use(
             googleId: profile.id,
             fullName: profile.displayName,
             email: profile.emails[0].value,
-            role: "customer",
+            role: "user",
           });
         }
 

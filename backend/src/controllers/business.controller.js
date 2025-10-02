@@ -3,6 +3,8 @@ import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import { Business } from "../models/business.model.js";
 import { businessSchema } from "../validations/business.validation.js";
+import cloudinary from "../utils/cloudinary.js";
+import fs from "fs";
 
 export const readBusiness = asyncHandler(async (req, res) => {
   const ownerId = req.user?._id;
@@ -20,11 +22,68 @@ export const readBusiness = asyncHandler(async (req, res) => {
     );
 });
 
+const parseJSONFields = (body) => {
+  const jsonFields = [
+    "subCategory",
+    "services",
+    "location",
+    "openingHours",
+    "tags",
+  ];
+
+  for (const field of jsonFields) {
+    if (body[field]) {
+      try {
+        body[field] = JSON.parse(body[field]);
+      } catch (err) {
+        throw new ApiError(500, "Server error!");
+      }
+    }
+  }
+};
+
 export const createBusiness = asyncHandler(async (req, res) => {
   const ownerId = req.user?._id;
 
-  const parsed = businessSchema.safeParse(req.body);
+  if (!req.files || req.files.length === 0) {
+    throw new ApiError(400, "At least one business image is required");
+  }
 
+  const uploadedImages = [];
+  try {
+    for (const file of req.files) {
+      const result = await cloudinary.uploader.upload(file.path, {
+        folder: "businesses",
+      });
+      uploadedImages.push(result.secure_url);
+      fs.unlinkSync(file.path);
+    }
+  } catch (err) {
+    req.files.forEach((file) => {
+      if (fs.existsSync(file.path)) fs.unlinkSync(file.path);
+    });
+    throw new ApiError(500, "Image upload failed", err.message);
+  }
+
+  req.body.images = uploadedImages;
+  req.body.owner = ownerId.toString();
+
+  parseJSONFields(req.body);
+
+  if (
+    req.body.location?.coordinates &&
+    Array.isArray(req.body.location.coordinates)
+  ) {
+    req.body.location = {
+      ...req.body.location,
+      coordinates: {
+        type: "Point",
+        coordinates: req.body.location.coordinates,
+      },
+    };
+  }
+
+  const parsed = businessSchema.safeParse(req.body);
   if (!parsed.success) {
     const errors = parsed.error.issues.map((err) => ({
       field: err.path.join("."),
@@ -33,7 +92,7 @@ export const createBusiness = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Validation error", errors);
   }
 
-  const businessData = { ...parsed.data, owner: ownerId };
+  const businessData = parsed.data;
 
   const existing = await Business.findOne({
     owner: ownerId,
@@ -44,6 +103,8 @@ export const createBusiness = asyncHandler(async (req, res) => {
   }
 
   const business = await Business.create(businessData);
+
+  console.log(business);
 
   return res
     .status(201)
@@ -131,4 +192,16 @@ export const getNearbyBusinesses = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(new ApiResponse(200, businesses, "Businesses fetched successfully"));
+});
+
+export const popularBusiness = asyncHandler(async (req, res) => {
+  const business = await Business.find({ isActive: true })
+    .sort({ rating: -1 })
+    .limit(10);
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(200, business, "Fetch popular business sucessfully!")
+    );
 });

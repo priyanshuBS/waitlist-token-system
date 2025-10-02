@@ -5,15 +5,18 @@ import {
   updatedBusiness,
   deleteBusiness,
   getNearbyBusinesses,
+  popularBusiness,
 } from "../controllers/business.controller.js";
 import { protect } from "../middlewares/auth.middleware.js";
+import { upload } from "../middlewares/upload.middleware.js";
 
 const router = express.Router();
 
 router.get("/", protect, readBusiness);
-router.post("/create", protect, createBusiness);
+router.post("/create", protect, upload.array("images", 5), createBusiness);
 router.post("/update", protect, updatedBusiness);
 router.post("/delete", protect, deleteBusiness);
 router.get("/nearby", protect, getNearbyBusinesses);
+router.get("/popular", protect, popularBusiness);
 
 export default router;

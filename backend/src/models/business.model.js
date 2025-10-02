@@ -26,6 +26,7 @@ const businessSchema = new mongoose.Schema(
     subCategory: [{ type: String }],
     services: [
       {
+        _id: false,
         name: { type: String, required: true },
         price: { type: Number },
         durationMinutes: { type: Number },
@@ -44,10 +45,6 @@ const businessSchema = new mongoose.Schema(
     openingHours: {
       start: { type: String },
       end: { type: String },
-    },
-    dailyLimit: {
-      type: Number,
-      default: 0,
     },
     isActive: {
       type: Boolean,
