@@ -15,6 +15,8 @@ export const readBusiness = asyncHandler(async (req, res) => {
     .sort({ createdAt: -1 })
     .lean();
 
+  // console.log(business);
+
   return res
     .status(200)
     .json(
@@ -104,7 +106,7 @@ export const createBusiness = asyncHandler(async (req, res) => {
 
   const business = await Business.create(businessData);
 
-  console.log(business);
+  // console.log(business);
 
   return res
     .status(201)
@@ -180,7 +182,7 @@ export const getNearbyBusinesses = asyncHandler(async (req, res) => {
         },
       },
       isActive: true,
-    });
+    }).limit(10);
   }
 
   if (!businesses.length) {
@@ -204,4 +206,22 @@ export const popularBusiness = asyncHandler(async (req, res) => {
     .json(
       new ApiResponse(200, business, "Fetch popular business sucessfully!")
     );
+});
+
+export const getBusinessById = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  if (!id) {
+    throw new ApiError(400, "Not recieve id");
+  }
+
+  const business = await Business.findById(id);
+
+  if (!business) {
+    throw new ApiError(404, "Business not found.");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, business, "Fetch business successfully!"));
 });

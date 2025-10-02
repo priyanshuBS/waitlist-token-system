@@ -24,19 +24,19 @@ app.use("/api/auth", authRouter);
 app.use("/api/business", businessRouter);
 
 // global error middleware
-app.use((err, req, res, next) => {
-  if (err instanceof ApiError) {
-    return res.status(err.statusCode).json({
-      success: false,
-      message: err.message,
-      errors: err.errors,
-    });
-  }
+// app.use((err, req, res, next) => {
+//   if (err instanceof ApiError) {
+//     return res.status(err.statusCode).json({
+//       success: false,
+//       message: err.message,
+//       errors: err.errors,
+//     });
+//   }
 
-  res.status(500).json({
-    success: false,
-    message: "Internal Server Error",
-  });
-});
+//   res.status(500).json({
+//     success: false,
+//     message: "Internal Server Error",
+//   });
+// });
 
 export default app;
