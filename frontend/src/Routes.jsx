@@ -8,6 +8,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { fetchUserBusiness } from "./api/business";
 import BusinessDash from "./pages/dashboard/BusinessDash";
 import CreateBusiness from "./pages/business/CreateBusiness";
+import BusinessInfo from "./pages/business/BusinessInfo";
 
 const appRouter = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const appRouter = createBrowserRouter([
           {
             path: "business/create",
             element: <CreateBusiness />,
+          },
+          {
+            path: "business/:id",
+            element: <BusinessInfo />,
           },
         ],
       },

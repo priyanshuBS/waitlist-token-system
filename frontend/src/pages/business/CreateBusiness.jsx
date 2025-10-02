@@ -5,6 +5,7 @@ import LocationPicker from "../../components/business/LocationPicker";
 import ImagesUpload from "../../components/business/ImagesUpload";
 import { useMutation } from "@tanstack/react-query";
 import { createBusinessApi } from "../../api/business";
+import toast from "react-hot-toast";
 
 const CreateBusiness = () => {
   const [formData, setFormData] = useState({
@@ -28,6 +29,7 @@ const CreateBusiness = () => {
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: createBusinessApi,
     onSuccess: () => {
+      toast.success("Business created successfully!");
       setFormData({
         name: "",
         description: "",
