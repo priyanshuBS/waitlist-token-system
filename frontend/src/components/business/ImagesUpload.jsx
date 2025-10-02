@@ -24,6 +24,7 @@ const ImagesUpload = ({ formData, setFormData }) => {
         <input
           type="file"
           multiple
+          name="images"
           accept="image/*"
           onChange={handleChange}
           className="hidden"

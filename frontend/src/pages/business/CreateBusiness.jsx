@@ -3,6 +3,8 @@ import Input from "../../components/UI/Input";
 import ServiceInput from "../../components/business/ServicesInput";
 import LocationPicker from "../../components/business/LocationPicker";
 import ImagesUpload from "../../components/business/ImagesUpload";
+import { useMutation } from "@tanstack/react-query";
+import { createBusinessApi } from "../../api/business";
 
 const CreateBusiness = () => {
   const [formData, setFormData] = useState({
@@ -23,6 +25,29 @@ const CreateBusiness = () => {
     images: [],
   });
 
+  const { mutate, isPending, isError, error } = useMutation({
+    mutationFn: createBusinessApi,
+    onSuccess: () => {
+      setFormData({
+        name: "",
+        description: "",
+        mainCategory: "",
+        subCategory: [],
+        services: [{ name: "", price: "", durationMinutes: "" }],
+        location: {
+          address: "",
+          city: "",
+          state: "",
+          country: "India",
+          coordinates: null,
+        },
+        openingHours: { start: "", end: "" },
+        tags: [],
+        images: [],
+      });
+    },
+  });
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -30,7 +55,23 @@ const CreateBusiness = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+
+    const form = new FormData();
+
+    form.append("name", formData.name);
+    form.append("description", formData.description);
+    form.append("mainCategory", formData.mainCategory);
+    form.append("subCategory", JSON.stringify(formData.subCategory));
+    form.append("services", JSON.stringify(formData.services));
+    form.append("location", JSON.stringify(formData.location));
+    form.append("openingHours", JSON.stringify(formData.openingHours));
+    form.append("tags", JSON.stringify(formData.tags));
+
+    formData.images.forEach((file) => {
+      form.append("images", file);
+    });
+    mutate(form);
+    console.log(form);
   };
 
   return (
@@ -74,8 +115,13 @@ const CreateBusiness = () => {
             <Input
               name="subCategory"
               type="text"
-              value={formData.subCategory}
-              onChange={handleChange}
+              value={formData.subCategory.join(", ")}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  subCategory: e.target.value.split(", "),
+                })
+              }
               placeholder="Sub Category (comma separated)"
               className="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 rounded-xl"
             />
@@ -123,9 +169,9 @@ const CreateBusiness = () => {
           <Input
             type="text"
             placeholder="Tags (comma separated)"
-            value={formData.tags.join(",")}
+            value={formData.tags.join(", ")}
             onChange={(e) =>
-              setFormData({ ...formData, tags: e.target.value.split(",") })
+              setFormData({ ...formData, tags: e.target.value.split(", ") })
             }
             className="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 rounded-xl"
           />
@@ -138,9 +184,14 @@ const CreateBusiness = () => {
             type="submit"
             className="w-full py-4 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold rounded-2xl hover:scale-105 transform transition-all shadow-lg cursor-pointer"
           >
-            Register Business
+            {isPending ? "Submitting..." : "Register Business"}
           </button>
         </form>
+        {isError && (
+          <p className="text-red-500 mt-2">
+            {error?.message || "Something went wrong!"}
+          </p>
+        )}
       </div>
     </div>
   );
